@@ -41,6 +41,20 @@
             "costo_faltante": 3.4,
             "temp_inicial": 20.0,
             "temp_limite": 25.0
+        },
+        "FAR-004": {
+            "codigo": "FAR-004",
+            "nombre": "Omega-3",
+            "categoria": "Antibiótico",
+            "stock_actual": 100,
+            "capacidad_maxima": 240,
+            "punto_reorden": 50,
+            "precio_venta": 11.0,
+            "costo_compra": 5.4,
+            "costo_almacenamiento": 0.22,
+            "costo_faltante": 5.6,
+            "temp_inicial": 20.0,
+            "temp_limite": 24.0
         }
     }
 }

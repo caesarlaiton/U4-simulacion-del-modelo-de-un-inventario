@@ -32,9 +32,10 @@ inventario = st.session_state["inventario"]
 st.title("Sistema de inventario - Sector farmacia")
 st.markdown("Administración de productos disponibles, cantidades, precios y parámetros base.")
 
-tab_catalogo, tab_crud = st.tabs([
+tab_catalogo, tab_crud, tab_simulacion = st.tabs([
     "Catálogo de productos",
-    "Registrar o eliminar productos"
+    "Registrar o eliminar productos",
+    "Simulación de Inventario (30 Días)"
 ])
 
 # 1er tab: catálogo editable y gráfico de existencias actuales
@@ -171,3 +172,62 @@ with tab_crud:
                 st.rerun()
             else:
                 st.warning(mensaje)
+
+# simulacion de 30 dias de inventario
+with tab_simulacion:
+    st.subheader("Simulación Dinámica del Inventario (30 Días)")
+    st.markdown("Ejecute la simulación secuencial para evaluar el comportamiento del inventario, la demanda, las alertas de stock y los precios dinámicos.")
+    
+    if st.button("Iniciar Simulación", type="primary"):
+        import random
+        historial_simulacion = []
+        
+        # esto es para crear una copia del inventario para no afectar el json
+        inventario_sim = {cod: prod.copy() for cod, prod in inventario.items()}
+        
+        # Bucle principal de los 30 días
+        for dia in range(1, 31):
+            for cod, prod in inventario_sim.items():
+                # Simular demanda aleatoria diaria de los clientes
+                demanda = random.randint(3, 12)
+                stock_actual = prod["stock_actual"] - demanda
+                
+                # Control de stock
+                if stock_actual <= 0:
+                    stock_actual = 0
+                    st.error(f"Día {dia}: ¡El producto **{prod['nombre']}** se ha agotado por completo!")
+                elif stock_actual <= prod["punto_reorden"]:
+                    st.warning(f"Día {dia}: El producto **{prod['nombre']}** llegó al punto de reorden ({stock_actual} u.). ¡Se requiere reponer!")
+                    # Reposición automatica
+                    stock_actual = prod["capacidad_maxima"]
+                    st.info(f"Día {dia}: Reposición completada para **{prod['nombre']}** (Nuevo stock: {stock_actual} u.).")
+                
+                # Calculadora de precios
+                if demanda > 9:
+                    prod["precio_venta"] *= 1.03  # Sube 3%
+                elif demanda < 4:
+                    prod["precio_venta"] *= 0.98  # Baja 2%
+                
+                # Actualizar el stock simulado del producto
+                prod["stock_actual"] = stock_actual
+                
+                # Registrar los cambios del día para la tabla y la grafica
+                historial_simulacion.append({
+                    "Día": dia,
+                    "Código": cod,
+                    "Medicamento": prod["nombre"],
+                    "Stock Actual": stock_actual,
+                    "Precio Venta ($)": round(prod["precio_venta"], 2)
+                })
+        
+        df_simulacion = pd.DataFrame(historial_simulacion)
+        
+        st.success("¡Simulación de 30 días completada con éxito!")
+        
+        # Mostrar tabla estructurada con los cambios diarios
+        st.subheader("Historial de la Simulación")
+        st.dataframe(df_simulacion, use_container_width=True, hide_index=True)
+        
+        # Mostrar grafica interactiva de la evolución del stock
+        st.subheader("Evolución del Stock por Medicamento")
+        st.line_chart(df_simulacion, x="Día", y="Stock Actual", color="Medicamento")
