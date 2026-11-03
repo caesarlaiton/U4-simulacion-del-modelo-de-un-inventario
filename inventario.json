@@ -1,0 +1,46 @@
+{
+    "inventario": {
+        "FAR-001": {
+            "codigo": "FAR-001",
+            "nombre": "Atamel Forte (Acetaminofén 650mg)",
+            "categoria": "Analgésico",
+            "stock_actual": 150,
+            "capacidad_maxima": 300,
+            "punto_reorden": 60,
+            "precio_venta": 3.5,
+            "costo_compra": 1.6,
+            "costo_almacenamiento": 0.08,
+            "costo_faltante": 1.9,
+            "temp_inicial": 21.0,
+            "temp_limite": 26.0
+        },
+        "FAR-002": {
+            "codigo": "FAR-002",
+            "nombre": "Lantus (Insulina Glargina 100 UI/ml)",
+            "categoria": "Antidiabético Refrigerado",
+            "stock_actual": 90,
+            "capacidad_maxima": 180,
+            "punto_reorden": 45,
+            "precio_venta": 28.0,
+            "costo_compra": 15.5,
+            "costo_almacenamiento": 0.65,
+            "costo_faltante": 12.5,
+            "temp_inicial": 4.0,
+            "temp_limite": 8.0
+        },
+        "FAR-003": {
+            "codigo": "FAR-003",
+            "nombre": "Losartán Potásico 50mg (Genven)",
+            "categoria": "Antihipertensivo",
+            "stock_actual": 120,
+            "capacidad_maxima": 250,
+            "punto_reorden": 50,
+            "precio_venta": 6.5,
+            "costo_compra": 3.1,
+            "costo_almacenamiento": 0.14,
+            "costo_faltante": 3.4,
+            "temp_inicial": 20.0,
+            "temp_limite": 25.0
+        }
+    }
+}
